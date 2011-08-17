@@ -16,7 +16,8 @@ my %WriteMakefileArgs = (
     'English' => '0',
     'RDF::Trine::Parser' => '0',
     'Template' => '0',
-    'Test::More' => '0'
+    'Test::More' => '0',
+    'utf8' => '0'
   },
   'CONFIGURE_REQUIRES' => {
     'ExtUtils::MakeMaker' => '6.30'
@@ -35,7 +36,7 @@ my %WriteMakefileArgs = (
     'Scalar::Util' => '0',
     'overload' => '0'
   },
-  'VERSION' => '0.06',
+  'VERSION' => '0.062',
   'test' => {
     'TESTS' => 't/*.t'
   }

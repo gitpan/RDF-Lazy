@@ -2,7 +2,7 @@
 use warnings;
 package RDF::Lazy::Literal;
 BEGIN {
-  $RDF::Lazy::Literal::VERSION = '0.06';
+  $RDF::Lazy::Literal::VERSION = '0.062';
 }
 #ABSTRACT: Literal node in a RDF::Lazy graph
 
@@ -26,7 +26,7 @@ sub new {
         if ($language =~ $LANGTAG) {
             $datatype = undef;
         } elsif( not defined $datatype ) {
-            $datatype = $graph->uri($language);
+            $datatype = $graph->uri($language)->trine;
             $language = undef;
         }
     }
@@ -51,7 +51,7 @@ sub lang {
     $xxx =~ s/_/-/g;
     return unless $xxx =~ $LANGTAG;
 
-    if ( $xxx eq $lang or $xxx =~ s/-$// and index($lang, $xxx) == 0 ) {
+    if ( $xxx eq "$lang" or $xxx =~ s/-$// and index($lang, $xxx) == 0 ) {
         return $lang;
     }
 
@@ -95,7 +95,7 @@ RDF::Lazy::Literal - Literal node in a RDF::Lazy graph
 
 =head1 VERSION
 
-version 0.06
+version 0.062
 
 =head1 DESCRIPTION
 

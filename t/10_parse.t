@@ -10,7 +10,7 @@ my $rdf = RDF::Lazy->new($data);
 is( $rdf->size, 4, 'rdf data as first parameter' );
 
 $rdf = RDF::Lazy->new( rdf => $data );
-is( "$rdf", "4 triples", 'rdf data with named parameter' );
+is( $rdf->str, "4 triples", 'rdf data with named parameter' );
 
 my $s = $rdf->uri('"hello"');
 is( $s->str, "hello", 'parse plain literal' );
@@ -25,7 +25,8 @@ is( $s->str, "true", 'parse plain true' );
 
 
 # Turtle
-like ( $rdf->ttlpre, qr/^<pre/ );
+like ( $rdf->ttlpre, qr/^<pre.*alice&gt;.*knows&gt;/s, 'RDF::Lazy->ttlpre' );
+like ( $rdf->resource('http://example.org/bob')->ttlpre, qr/^<pre.*4 triples.*bob&gt;.*knows&gt;/s, 'RDF::Lazy::Node->ttlpre' );
 
 done_testing;
 

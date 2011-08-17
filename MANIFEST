@@ -1,14 +1,13 @@
+Changes
 LICENSE
 MANIFEST
-META.json
 META.yml
 Makefile.PL
 README
-README.mkdn
-dist.ini
 lib/RDF/Lazy.pm
 lib/RDF/Lazy/Blank.pm
 lib/RDF/Lazy/Literal.pm
+lib/RDF/Lazy/Nil.pm
 lib/RDF/Lazy/Node.pm
 lib/RDF/Lazy/Resource.pm
 t/00_compile.t
@@ -19,6 +18,5 @@ t/40_chains.t
 t/author-critic.t
 t/release-eol.t
 t/release-no-tabs.t
-t/release-pod-coverage.t
 t/release-pod-syntax.t
 t/template.t

@@ -2,7 +2,7 @@
 use warnings;
 package RDF::Lazy::Resource;
 BEGIN {
-  $RDF::Lazy::Resource::VERSION = '0.06';
+  $RDF::Lazy::Resource::VERSION = '0.062';
 }
 #ABSTRACT: URI reference node (aka resource) in a RDF::Lazy graph
 
@@ -10,7 +10,7 @@ use base 'RDF::Lazy::Node';
 use Scalar::Util qw(blessed);
 use CGI qw(escapeHTML);
 
-use overload '""' => \&str, 'eq' => \&eq;
+use overload '""' => \&str;
 
 sub new {
     my $class    = shift;
@@ -31,10 +31,6 @@ sub str {
     shift->trine->uri_value;
 }
 
-sub eq {
-    "$_[0]" eq "$_[1]";
-}
-
 *uri  = *str;
 
 *href = *RDF::Lazy::Node::esc;
@@ -51,7 +47,7 @@ RDF::Lazy::Resource - URI reference node (aka resource) in a RDF::Lazy graph
 
 =head1 VERSION
 
-version 0.06
+version 0.062
 
 =head1 DESCRIPTION
 

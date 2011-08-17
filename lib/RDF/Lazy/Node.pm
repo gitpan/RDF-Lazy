@@ -2,7 +2,7 @@ use strict;
 use warnings;
 package RDF::Lazy::Node;
 BEGIN {
-  $RDF::Lazy::Node::VERSION = '0.06';
+  $RDF::Lazy::Node::VERSION = '0.062';
 }
 #ABSTRACT: A node in a lazy RDF graph
 
@@ -42,7 +42,7 @@ sub type {
         my $types = $self->rels( $rdf_type ); # TODO use filter?
         foreach ( @_ ) {
             my $type = $self->graph->uri( $_ );
-            return 1 if (grep { $_ eq $type } @$types);
+            return 1 if (grep { $_->str eq $type->str } @$types);
         }
         return 0;
     } else {
@@ -78,7 +78,7 @@ sub is {
 }
 
 sub turtle { $_[0]->graph->turtle( @_ ); }
-*ttl = *turtle;
+sub ttlpre { $_[0]->graph->ttlpre( @_ ); }
 
 sub rel  { $_[0]->graph->rel( @_ ); }
 sub rels { $_[0]->graph->rels( @_ ); }
@@ -90,10 +90,6 @@ sub _autoload {
     my $property = shift;
     return if $property =~ /^(query|lang)$/; # reserved words
     return $self->rel( $property, @_ );
-}
-
-sub eq {
-    "$_[0]" eq "$_[1]";
 }
 
 1;
@@ -108,7 +104,7 @@ RDF::Lazy::Node - A node in a lazy RDF graph
 
 =head1 VERSION
 
-version 0.06
+version 0.062
 
 =head1 DESCRIPTION
 

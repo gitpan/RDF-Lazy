@@ -2,7 +2,7 @@
 use warnings;
 package RDF::Lazy;
 BEGIN {
-  $RDF::Lazy::VERSION = '0.06';
+  $RDF::Lazy::VERSION = '0.062';
 }
 #ABSTRACT: Lazy typing access to RDF data
 
@@ -11,12 +11,16 @@ use RDF::Trine::NamespaceMap;
 use CGI qw(escapeHTML);
 
 use RDF::Lazy::Node;
-use Scalar::Util qw(blessed);
+use Scalar::Util qw(blessed refaddr);
 use Carp qw(carp croak);
 
 our $AUTOLOAD;
 
-use overload '""' => sub { shift->size . " triples"; };
+#use overload '""' => \&str;
+
+sub str {
+    shift->size . " triples";
+}
 
 sub new {
     my $class = shift;
@@ -142,11 +146,11 @@ sub turtle {
     return $serializer->serialize_iterator_to_string( $iterator );
 }
 
-*ttl = *turtle;
+#*ttl = *turtle;
 
 sub ttlpre {
     return '<pre class="turtle">'
-        . escapeHTML( "# $_[0]\n" . ttl(@_) )
+        . escapeHTML( "# " . ($_[0]->str||'') . "\n" . turtle(@_) )
         . '</pre>';
 }
 
@@ -164,17 +168,19 @@ sub uri {
     return unless defined $node;
 
     if (blessed $node) {
-           if ($node->isa('RDF::Lazy::Node')) {
-            $node = $self->uri( $node->trine ); # copy from another graph
+        if ($node->isa('RDF::Lazy::Node')) {
+            # copy from another or from this graph
+            # return $node if refaddr($node->graph) eq refaddr($self);
+            $node = $self->trine;
         }
         if ($node->isa('RDF::Trine::Node::Resource')) {
-            return $self->resource( $node );
+            return RDF::Lazy::Resource->new( $self, $node );
         } elsif ($node->isa('RDF::Trine::Node::Literal')) {
-                return $self->literal( $node );
+            return RDF::Lazy::Literal->new( $self, $node );
         } elsif ($node->isa('RDF::Trine::Node::Blank')) {
-            return $self->blank( $node );
+            return RDF::Lazy::Blank->new( $self, $node );
         } else {
-            carp 'Cannot create RDF::Lazy::Node from '.ref($node);
+            carp 'Cannot create RDF::Lazy::Node from ' . ref($node);
             return;
         }
     }
@@ -182,11 +188,11 @@ sub uri {
     my ($prefix,$local,$uri);
 
     if ( $node =~ /^<(.*)>$/ ) {
-        return $self->resource($1);
+        return RDF::Lazy::Resource->new( $self, $1 );
     } elsif ( $node =~ /^_:(.*)$/ ) {
-        return $self->blank( $1 );
+        return RDF::Lazy::Blank->new( $self, $1 );
     } elsif ( $node =~ /^\[\s*\]$/ ) {
-        return $self->blank;
+        return RDF::Lazy::Blank->new( $self );
     } elsif ( $node =~ /^["'+-0-9]|^(true|false)$/ ) {
         return $self->_literal( $node );
     } elsif ( $node =~ /^([^:]*):([^:]*)$/ ) {
@@ -207,7 +213,7 @@ sub uri {
     }
 
     return unless defined $uri;
-    return $self->resource( $uri );
+    return RDF::Lazy::Resource->new( $self, $uri );
 }
 
 sub namespaces {
@@ -343,7 +349,7 @@ RDF::Lazy - Lazy typing access to RDF data
 
 =head1 VERSION
 
-version 0.06
+version 0.062
 
 =head1 SYNOPSIS
 
@@ -381,10 +387,7 @@ version 0.06
   $x->rev('foaf:knows');    # retrieve a person known by $x
 
   $x->rels('foaf:knows');   # retrieve all people that $x knows
-  $x->rel_('foaf:knows');   # same
-
   $x->revs('foaf:knows');   # retrieve all people known by $x
-  $x->rev_('foaf:knows');   # same
 
   $x->foaf_knows;           # short form of $x->rel('foaf:knows')
   $x->foaf_knows_;          # short form of $x->rels('foaf:knows')
@@ -406,7 +409,7 @@ version 0.06
 
   ### How to show RDF
 
-  $g->ttl;     # dump in RDF/Turtle syntax
+  $g->turtle;  # dump in RDF/Turtle syntax
   $g->ttlpre;  # dump in RDF/Turtle, wrapped in a HTML <pre> tag
 
 =head1 DESCRIPTION

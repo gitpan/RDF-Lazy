@@ -2,14 +2,14 @@
 use warnings;
 package RDF::Lazy::Blank;
 BEGIN {
-  $RDF::Lazy::Blank::VERSION = '0.06';
+  $RDF::Lazy::Blank::VERSION = '0.062';
 }
 #ABSTRACT: Blank node in a RDF::Lazy graph
 
 use base 'RDF::Lazy::Node';
 use Scalar::Util qw(blessed);
 
-use overload '""' => \&str, 'eq' => \&eq;
+use overload '""' => \&str;
 
 sub new {
     my $class = shift;
@@ -31,10 +31,6 @@ sub str {
     '_:'.shift->trine->blank_identifier
 }
 
-sub eq {
-    $_[0]->trine->blank_identifier eq $_[1]->trine->blank_identifier;
-}
-
 1;
 
 
@@ -47,7 +43,7 @@ RDF::Lazy::Blank - Blank node in a RDF::Lazy graph
 
 =head1 VERSION
 
-version 0.06
+version 0.062
 
 =head1 DESCRIPTION
 
