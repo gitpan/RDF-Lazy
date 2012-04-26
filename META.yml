@@ -12,7 +12,7 @@ build_requires:
 configure_requires:
   ExtUtils::MakeMaker: 6.30
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.200012, CPAN::Meta::Converter version 2.110930'
+generated_by: 'Dist::Zilla version 4.300014, CPAN::Meta::Converter version 2.120921'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -24,10 +24,16 @@ requires:
   RDF::Trine: 0
   RDF::Trine::Model: 0
   RDF::Trine::NamespaceMap: 0
+  RDF::Trine::Serializer::RDFJSON: 0
+  RDF::Trine::Serializer::RDFXML: 0
   RDF::Trine::Serializer::Turtle: 0
   Scalar::Util: 0
+  base: 0
   overload: 0
+  strict: 0
+  warnings: 0
 resources:
   bugtracker: https://github.com/nichtich/RDF-Lazy/issues
-  repository: https://github.com/nichtich/RDF-Lazy
-version: 0.062
+  homepage: https://github.com/nichtich/RDF-Lazy
+  repository: https://github.com/nichtich/RDF-Lazy.git
+version: 0.063

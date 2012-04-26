@@ -1,8 +1,8 @@
 ﻿use strict;
 use warnings;
 package RDF::Lazy::Blank;
-BEGIN {
-  $RDF::Lazy::Blank::VERSION = '0.062';
+{
+  $RDF::Lazy::Blank::VERSION = '0.063';
 }
 #ABSTRACT: Blank node in a RDF::Lazy graph
 
@@ -43,7 +43,7 @@ RDF::Lazy::Blank - Blank node in a RDF::Lazy graph
 
 =head1 VERSION
 
-version 0.062
+version 0.063
 
 =head1 DESCRIPTION
 

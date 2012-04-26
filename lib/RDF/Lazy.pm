@@ -1,14 +1,18 @@
 ﻿use strict;
 use warnings;
 package RDF::Lazy;
-BEGIN {
-  $RDF::Lazy::VERSION = '0.062';
+{
+  $RDF::Lazy::VERSION = '0.063';
 }
 #ABSTRACT: Lazy typing access to RDF data
 
 use RDF::Trine::Model;
 use RDF::Trine::NamespaceMap;
 use CGI qw(escapeHTML);
+
+use RDF::Trine::Serializer::RDFXML;
+use RDF::Trine::Serializer::Turtle;
+use RDF::Trine::Serializer::RDFJSON;
 
 use RDF::Lazy::Node;
 use Scalar::Util qw(blessed refaddr);
@@ -127,26 +131,24 @@ sub rev  { shift->_relrev( 0, 'rev', @_  ); }
 sub revs { shift->_relrev( 1, 'rev', @_  ); }
 
 sub turtle {
-    my $self     = shift;
-    my $subject  = shift;
-
-    use RDF::Trine::Serializer::Turtle;
-    my $serializer = RDF::Trine::Serializer::Turtle->new( namespaces => $self->{namespaces} );
-
-    my $iterator;
-
-    if ($subject) {
-        $subject = $self->uri($subject)
-            unless blessed($subject) and $subject->isa('RDF::Lazy::Node');
-        $iterator = $self->{model}->bounded_description( $subject->trine );
-    } else {
-        $iterator = $self->model->as_stream;
-    }
-
-    return $serializer->serialize_iterator_to_string( $iterator );
+    my $self = shift;
+    $self->_serialize(
+        RDF::Trine::Serializer::Turtle->new( namespaces => $self->{namespaces} ),
+        @_
+    );
 }
 
-#*ttl = *turtle;
+sub rdfjson {
+    shift->_serialize( RDF::Trine::Serializer::RDFJSON->new, @_ );
+}
+
+sub rdfxml {
+    my $self = shift;
+    $self->_serialize(
+        RDF::Trine::Serializer::RDFXML->new( namespaces => $self->{namespaces} ),
+        @_
+    );
+}
 
 sub ttlpre {
     return '<pre class="turtle">'
@@ -337,6 +339,21 @@ sub _relrev {
     }
 }
 
+sub _serialize {
+    my ($self, $serializer, $subject) = @_;
+    my $iterator;
+
+    if ($subject) {
+        $subject = $self->uri($subject)
+            unless blessed($subject) and $subject->isa('RDF::Lazy::Node');
+        $iterator = $self->{model}->bounded_description( $subject->trine );
+    } else {
+        $iterator = $self->model->as_stream;
+    }
+
+    return $serializer->serialize_iterator_to_string( $iterator );
+}
+
 1;
 
 
@@ -349,7 +366,7 @@ RDF::Lazy - Lazy typing access to RDF data
 
 =head1 VERSION
 
-version 0.062
+version 0.063
 
 =head1 SYNOPSIS
 
@@ -411,6 +428,8 @@ version 0.062
 
   $g->turtle;  # dump in RDF/Turtle syntax
   $g->ttlpre;  # dump in RDF/Turtle, wrapped in a HTML <pre> tag
+  $g->rdfxml;  # dump in RDF/XML
+  $g->rdfjson; # dump in RDF/JSON
 
 =head1 DESCRIPTION
 

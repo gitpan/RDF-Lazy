@@ -1,8 +1,8 @@
 use strict;
 use warnings;
 package RDF::Lazy::Nil;
-BEGIN {
-  $RDF::Lazy::Nil::VERSION = '0.062';
+{
+  $RDF::Lazy::Nil::VERSION = '0.063';
 }
 
 use base 'RDF::Lazy::Node';
@@ -25,7 +25,7 @@ RDF::Lazy::Nil
 
 =head1 VERSION
 
-version 0.062
+version 0.063
 
 =head1 AUTHOR
 

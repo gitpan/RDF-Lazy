@@ -1,8 +1,8 @@
 ﻿use strict;
 use warnings;
 package RDF::Lazy::Resource;
-BEGIN {
-  $RDF::Lazy::Resource::VERSION = '0.062';
+{
+  $RDF::Lazy::Resource::VERSION = '0.063';
 }
 #ABSTRACT: URI reference node (aka resource) in a RDF::Lazy graph
 
@@ -47,7 +47,7 @@ RDF::Lazy::Resource - URI reference node (aka resource) in a RDF::Lazy graph
 
 =head1 VERSION
 
-version 0.062
+version 0.063
 
 =head1 DESCRIPTION
 
