@@ -7,15 +7,16 @@ README
 lib/RDF/Lazy.pm
 lib/RDF/Lazy/Blank.pm
 lib/RDF/Lazy/Literal.pm
-lib/RDF/Lazy/Nil.pm
 lib/RDF/Lazy/Node.pm
 lib/RDF/Lazy/Resource.pm
+lib/RDF/Lazy/Tutorial.pod
 t/00_compile.t
 t/10_parse.t
 t/20_lazy.t
 t/30_methods.t
 t/40_chains.t
 t/author-critic.t
+t/example.ttl
 t/release-eol.t
 t/release-no-tabs.t
 t/release-pod-syntax.t

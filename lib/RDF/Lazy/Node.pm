@@ -2,7 +2,7 @@ use strict;
 use warnings;
 package RDF::Lazy::Node;
 {
-  $RDF::Lazy::Node::VERSION = '0.063';
+  $RDF::Lazy::Node::VERSION = '0.07';
 }
 #ABSTRACT: A node in a lazy RDF graph
 
@@ -19,11 +19,12 @@ our $rdf_type = iri('http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
 
 sub trine { shift->[0]; }
 sub graph { shift->[1]; }
-#sub esc   { shift->str; }
 sub esc { escapeHTML( shift->str ) }
 
 sub is_literal  { shift->[0]->is_literal; }
 sub is_resource { shift->[0]->is_resource; }
+*is_uri = *is_resource;
+
 sub is_blank    { shift->[0]->is_blank; }
 
 sub AUTOLOAD {
@@ -46,7 +47,6 @@ sub type {
         }
         return 0;
     } else {
-        # TODO: return multiple types on request
         $self->rel( $rdf_type );
     }
 }
@@ -77,7 +77,7 @@ sub is {
     return 0;
 }
 
-sub turtle { $_[0]->graph->turtle( @_ ); }
+sub ttl    { $_[0]->graph->ttl( @_ ); }
 sub ttlpre { $_[0]->graph->ttlpre( @_ ); }
 
 sub rel  { $_[0]->graph->rel( @_ ); }
@@ -104,17 +104,17 @@ RDF::Lazy::Node - A node in a lazy RDF graph
 
 =head1 VERSION
 
-version 0.063
+version 0.07
 
 =head1 DESCRIPTION
 
 You should not directly create instances of this class, but use L<RDF::Lazy> as
-node factory to create instances of L<RDF::Node::Resource>,
-L<RDF::Node::Literal>, and L<RDF::Node::Blank>.
+node factory to create instances of L<RDF::Lazy::Resource>,
+L<RDF::Lazy::Literal>, and L<RDF::Lazy::Blank>.
 
-    $graph->resource( $uri );    # returns a RDF::Node::Resource
-    $graph->literal( $string );  # returns a RDF::Node::Literal
-    $graph->blank( $id );        # returns a RDF::Node::Blank
+    $graph->resource( $uri );    # returns a RDF::Lazy::Resource
+    $graph->literal( $string );  # returns a RDF::Lazy::Literal
+    $graph->blank( $id );        # returns a RDF::Lazy::Blank
 
 A lazy node contains a L<RDF::Trine::Node> and a pointer to the
 RDF::Lazy graph where the node is located in. You can create a
@@ -166,11 +166,7 @@ Checks whether the node fullfills some matching criteria, for instance
     $x->is('^')    # is_literal and has datatype
     $x->is('^^')   # is_literal and has datatype
 
-=head2 trine
-
-Returns the underlying L<RDF::Trine::Node>. You should better not use this.
-
-=head2 turtle / ttl
+=head2 ttl
 
 Returns an RDF/Turtle representation of the node's bounded connections.
 
@@ -190,7 +186,11 @@ Traverse the graph and return the first matching subject.
 
 Traverse the graph and return all matching subjects.
 
-=head2 TRAVERSING THE GRAPH
+=head2 trine
+
+Returns the underlying L<RDF::Trine::Node>. DO NOT USE THIS METHOD!
+
+=head1 TRAVERSING THE GRAPH
 
 Any other method name is used to query objects. The following three statements
 are equivalent:

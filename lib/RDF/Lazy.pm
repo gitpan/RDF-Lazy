@@ -2,12 +2,12 @@
 use warnings;
 package RDF::Lazy;
 {
-  $RDF::Lazy::VERSION = '0.063';
+  $RDF::Lazy::VERSION = '0.07';
 }
 #ABSTRACT: Lazy typing access to RDF data
 
 use RDF::Trine::Model;
-use RDF::Trine::NamespaceMap;
+use RDF::NS;
 use CGI qw(escapeHTML);
 
 use RDF::Trine::Serializer::RDFXML;
@@ -19,8 +19,6 @@ use Scalar::Util qw(blessed refaddr);
 use Carp qw(carp croak);
 
 our $AUTOLOAD;
-
-#use overload '""' => \&str;
 
 sub str {
     shift->size . " triples";
@@ -35,9 +33,13 @@ sub new {
         $rdf = $args{rdf};
     }
 
-    my $namespaces = $args{namespaces} || RDF::Trine::NamespaceMap->new;
-    $namespaces = RDF::Trine::NamespaceMap->new( $namespaces ) unless
-        blessed($namespaces) and $namespaces->isa('RDF::Trine::NamespaceMap');
+    my $namespaces = $args{namespaces} || RDF::NS->new('any');
+    if (blessed($namespaces) and $namespaces->is('RDF::NS')) {
+    } elsif (ref($namespaces)) {
+        $namespaces = bless { %$namespaces }, 'RDF::NS';
+    } else {
+        $namespaces = RDF::NS->new($namespaces);
+    }
 
     my $self = bless {
         namespaces => $namespaces,
@@ -138,6 +140,8 @@ sub turtle {
     );
 }
 
+*ttl = *turtle;
+
 sub rdfjson {
     shift->_serialize( RDF::Trine::Serializer::RDFJSON->new, @_ );
 }
@@ -205,14 +209,15 @@ sub uri {
         return;
     }
 
-    if (defined $prefix) {
-        $uri = $self->{namespaces}->uri("$prefix:$local");
-    } else {
-        # Bug in RDF::Trine::NamespaceMap, line 133 - wait until fixed
-        # $predicate = $self->{namespaces}->uri(":$local");
-        my $ns = $self->{namespaces}->namesespace_uri("");
-        $uri = $ns->uri($local) if defined $ns;
-    }
+    $prefix = "" unless defined $prefix;
+#    if (defined $prefix) {
+        $uri = $self->{namespaces}->URI("$prefix:$local");
+ #   } else {
+  #      # Bug in RDF::Trine::NamespaceMap, line 133 - wait until fixed
+   #     # $predicate = $self->{namespaces}->uri(":$local");
+    #    my $ns = $self->{namespaces}->namesespace_uri("");
+     #   $uri = $ns->uri($local) if defined $ns;
+    #}
 
     return unless defined $uri;
     return RDF::Lazy::Resource->new( $self, $uri );
@@ -229,7 +234,7 @@ sub subjects {
 }
 
 sub predicates {
-    my $self= shift;
+    my $self = shift;
     my ($subject, $object) = map { $self->uri($_)->trine } @_;
     return map { $self->uri($_) } $self->model->predicates( $subject, $object );
 }
@@ -366,7 +371,7 @@ RDF::Lazy - Lazy typing access to RDF data
 
 =head1 VERSION
 
-version 0.063
+version 0.07
 
 =head1 SYNOPSIS
 
@@ -374,7 +379,7 @@ version 0.063
 
   $g = RDF::Lazy->new(
      rdf        => $data,    # RDF::Trine::Model or ::Store (by reference)
-     namespaces => {         # namespace prefix or RDF::Trine::NamespaceMap
+     namespaces => {         # namespace prefix, RDF::NS or RDF::Trine::NamespaceMap
          foaf => 'http://xmlns.com/foaf/0.1/',
          rdf  => "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
          xsd  => "http://www.w3.org/2001/XMLSchema#",
@@ -445,9 +450,10 @@ prefixes. For lazy access and graph traversal, each RDF node
 =head2 new ( [ [ rdf => ] $rdf ] [, namespaces => $namespaces ] [ %options ])
 
 Return new RDF graph. Namespaces can be provided as hash reference or as
-L<RDF::Trine::NamespaceMap>. RDF data can be L<RDF:Trine::Model> or
-L<RDF::Trine::Store>, which are used by reference, or many other forms,
-as supported by L<add|/add>.
+L<RDF::Trine::NamespaceMap> or L<RDF::NS>. By default, the current local
+version of RDF::NS is used.  RDF data can be L<RDF:Trine::Model> or
+L<RDF::Trine::Store>, which are used by reference, or many other forms, as
+supported by L<add|/add>.
 
 =head2 resource ( $uri )
 

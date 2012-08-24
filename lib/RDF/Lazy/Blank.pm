@@ -2,7 +2,7 @@
 use warnings;
 package RDF::Lazy::Blank;
 {
-  $RDF::Lazy::Blank::VERSION = '0.063';
+  $RDF::Lazy::Blank::VERSION = '0.07';
 }
 #ABSTRACT: Blank node in a RDF::Lazy graph
 
@@ -13,7 +13,7 @@ use overload '""' => \&str;
 
 sub new {
     my $class = shift;
-    my $graph = shift || RDF::Lazy::Node::Graph->new;
+    my $graph = shift || RDF::Lazy->new;
     my $blank = shift;
 
     $blank = RDF::Trine::Node::Blank->new( $blank )
@@ -43,7 +43,7 @@ RDF::Lazy::Blank - Blank node in a RDF::Lazy graph
 
 =head1 VERSION
 
-version 0.063
+version 0.07
 
 =head1 DESCRIPTION
 

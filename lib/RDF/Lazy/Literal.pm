@@ -2,7 +2,7 @@
 use warnings;
 package RDF::Lazy::Literal;
 {
-  $RDF::Lazy::Literal::VERSION = '0.063';
+  $RDF::Lazy::Literal::VERSION = '0.07';
 }
 #ABSTRACT: Literal node in a RDF::Lazy graph
 
@@ -17,7 +17,7 @@ our $LANGTAG = qr/^(([a-z]{2,8}|[a-z]{2,3}-[a-z]{3})(-[a-z0-9_]+)?-?)$/i;
 
 sub new {
     my $class   = shift;
-    my $graph   = shift || RDF::Lazy::Node::Graph->new;
+    my $graph   = shift || RDF::Lazy->new;
     my $literal = shift;
 
     my ($language, $datatype) = @_;
@@ -95,7 +95,7 @@ RDF::Lazy::Literal - Literal node in a RDF::Lazy graph
 
 =head1 VERSION
 
-version 0.063
+version 0.07
 
 =head1 DESCRIPTION
 
@@ -127,7 +127,7 @@ Return whether this node matches a given language tag, for instance
 
 =head2 datatype ( [ @types ] )
 
-Return the datatype (as L<RDF::Node::Resource>, if this node has one.
+Return the datatype (as L<RDF::Lazy::Resource>, if this node has one.
 Can also be used to checks whether the datatype matches, for instance:
 
     $node->datatype('xsd:integer','xsd:double');
