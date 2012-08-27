@@ -2,12 +2,12 @@
 use warnings;
 package RDF::Lazy;
 {
-  $RDF::Lazy::VERSION = '0.07';
+  $RDF::Lazy::VERSION = '0.071';
 }
 #ABSTRACT: Lazy typing access to RDF data
 
 use RDF::Trine::Model;
-use RDF::NS;
+use RDF::NS qw(20120827);
 use CGI qw(escapeHTML);
 
 use RDF::Trine::Serializer::RDFXML;
@@ -227,6 +227,22 @@ sub namespaces {
     return shift->{namespaces};
 }
 
+sub ns {
+    my $self = shift;
+    return unless @_;
+
+    if (@_ == 2) { # set
+        $self->{namespaces}->{$_[0]} = $_[1];
+        $self->{nsprefix}->{$_[1]} = $_[0] if $self->{nsprefix};
+        return;
+    }
+    return $self->{namespaces}->{$_[0]}
+        if $_[0] !~ ':'; # get namespace
+    $self->{nsprefix} = $self->{namespaces}->REVERSE
+        unless $self->{nsprefix};
+    return $self->{nsprefix}->{$_[0]};
+}
+
 sub subjects {
     my $self = shift;
     my ($predicate, $object) = map { $self->uri($_)->trine } @_;
@@ -371,7 +387,7 @@ RDF::Lazy - Lazy typing access to RDF data
 
 =head1 VERSION
 
-version 0.07
+version 0.071
 
 =head1 SYNOPSIS
 
@@ -502,9 +518,20 @@ Returns a RDF/Turtle representation of a node's bounded description.
 Returns an HTML escaped RDF/Turtle representation of a node's bounded
 description, wrapped in a HTML C<< <pre class="turtle"> >> element.
 
+=head2 ns ( $prefix | $namespace | $prefix => $namespace )
+
+Gets or sets a namespace mapping for the entire graph. By default, RDF::Lazy
+makes use of popular namespaces defined in L<RDF::NS>.
+
+   $g->ns('dc');   # returns 'http://purl.org/dc/elements/1.1/'
+   $g->ns('http://purl.org/dc/elements/1.1/');  # returns 'dc'
+   $g->ns( dc => 'http://example.org/' );       # modify mapping
+
 =head1 SEE ALSO
 
-L<RDF::Helper> and L<RDF::TrineShortcuts> provide similar APIs.
+L<RDF::Helper> and L<RDF::TrineShortcuts> provide similar APIs. Another similar framework
+for PHP and Python is Graphite: http://graphite.ecs.soton.ac.uk/,
+http://code.google.com/p/python-graphite/.
 
 =head1 AUTHOR
 

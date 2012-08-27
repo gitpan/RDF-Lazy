@@ -2,13 +2,14 @@
 use warnings;
 package RDF::Lazy::Resource;
 {
-  $RDF::Lazy::Resource::VERSION = '0.07';
+  $RDF::Lazy::Resource::VERSION = '0.071';
 }
 #ABSTRACT: URI reference node (aka resource) in a RDF::Lazy graph
 
 use base 'RDF::Lazy::Node';
 use Scalar::Util qw(blessed);
 use CGI qw(escapeHTML);
+use Try::Tiny;
 
 use overload '""' => \&str;
 
@@ -35,6 +36,17 @@ sub str {
 
 *href = *RDF::Lazy::Node::esc;
 
+sub qname {
+    my $self = shift;
+    try {
+        my ($ns,$local) = $self->[0]->qname; # let Trine split
+        $ns = $self->[1]->ns($ns) || return "";
+        return "$ns:$local";
+    } catch {
+        return "";
+    }
+}
+
 1;
 
 
@@ -47,7 +59,7 @@ RDF::Lazy::Resource - URI reference node (aka resource) in a RDF::Lazy graph
 
 =head1 VERSION
 
-version 0.07
+version 0.071
 
 =head1 DESCRIPTION
 
@@ -67,6 +79,11 @@ Alias for method 'str'.
 =head2 href
 
 Return the HTML-escaped URI value. Alias for method 'esc'.
+
+=head2 qname
+
+Returns a qualified name (C<prefix:local>) if a mathcing namespace prefix is
+defined. See also method L<RDF::Lazy#ns> for namespace handling.
 
 =head1 AUTHOR
 

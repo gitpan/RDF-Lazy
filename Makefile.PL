@@ -36,12 +36,13 @@ my %WriteMakefileArgs = (
     "RDF::Trine::Serializer::RDFXML" => 0,
     "RDF::Trine::Serializer::Turtle" => 0,
     "Scalar::Util" => 0,
+    "Try::Tiny" => 0,
     "base" => 0,
     "overload" => 0,
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "0.07",
+  "VERSION" => "0.071",
   "test" => {
     "TESTS" => "t/*.t"
   }

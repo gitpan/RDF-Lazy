@@ -2,7 +2,7 @@
 use warnings;
 package RDF::Lazy::Literal;
 {
-  $RDF::Lazy::Literal::VERSION = '0.07';
+  $RDF::Lazy::Literal::VERSION = '0.071';
 }
 #ABSTRACT: Literal node in a RDF::Lazy graph
 
@@ -95,7 +95,7 @@ RDF::Lazy::Literal - Literal node in a RDF::Lazy graph
 
 =head1 VERSION
 
-version 0.07
+version 0.071
 
 =head1 DESCRIPTION
 

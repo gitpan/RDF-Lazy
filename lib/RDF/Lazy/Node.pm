@@ -2,7 +2,7 @@ use strict;
 use warnings;
 package RDF::Lazy::Node;
 {
-  $RDF::Lazy::Node::VERSION = '0.07';
+  $RDF::Lazy::Node::VERSION = '0.071';
 }
 #ABSTRACT: A node in a lazy RDF graph
 
@@ -85,6 +85,8 @@ sub rels { $_[0]->graph->rels( @_ ); }
 sub rev  { $_[0]->graph->rev( @_ ); }
 sub revs { $_[0]->graph->revs( @_ ); }
 
+sub qname { "" };
+
 sub _autoload {
     my $self     = shift;
     my $property = shift;
@@ -104,7 +106,7 @@ RDF::Lazy::Node - A node in a lazy RDF graph
 
 =head1 VERSION
 
-version 0.07
+version 0.071
 
 =head1 DESCRIPTION
 
@@ -189,6 +191,10 @@ Traverse the graph and return all matching subjects.
 =head2 trine
 
 Returns the underlying L<RDF::Trine::Node>. DO NOT USE THIS METHOD!
+
+=head2 qname
+
+Returns a qualified string, if possible, or the empty string.
 
 =head1 TRAVERSING THE GRAPH
 

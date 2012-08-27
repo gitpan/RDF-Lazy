@@ -10,7 +10,7 @@ RDF::Lazy::Tutorial - Tutorial to get started with RDF::Lazy
 
 =head1 VERSION
 
-version 0.07
+version 0.071
 
 =encoding utf-8
 
