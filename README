@@ -1,11 +1,11 @@
 
 
 This archive contains the distribution RDF-Lazy,
-version 0.071:
+version 0.08:
 
   Lazy typing access to RDF data
 
-This software is copyright (c) 2011 by Jakob Voß.
+This software is copyright (c) 2013 by Jakob Voß.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-
+use 5.010001;
 
 use ExtUtils::MakeMaker 6.30;
 
@@ -12,9 +12,7 @@ my %WriteMakefileArgs = (
   "ABSTRACT" => "Lazy typing access to RDF data",
   "AUTHOR" => "Jakob Vo\303\237 <voss\@gbv.de>",
   "BUILD_REQUIRES" => {
-    "Data::Dumper" => 0,
     "RDF::Trine::NamespaceMap" => 0,
-    "RDF::Trine::Parser" => 0,
     "Template" => 0,
     "Test::More" => 0,
     "utf8" => 0
@@ -32,6 +30,7 @@ my %WriteMakefileArgs = (
     "RDF::NS" => 0,
     "RDF::Trine" => 0,
     "RDF::Trine::Model" => 0,
+    "RDF::Trine::Parser" => 0,
     "RDF::Trine::Serializer::RDFJSON" => 0,
     "RDF::Trine::Serializer::RDFXML" => 0,
     "RDF::Trine::Serializer::Turtle" => 0,
@@ -42,7 +41,7 @@ my %WriteMakefileArgs = (
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "0.071",
+  "VERSION" => "0.08",
   "test" => {
     "TESTS" => "t/*.t"
   }

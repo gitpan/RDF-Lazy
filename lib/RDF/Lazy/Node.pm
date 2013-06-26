@@ -2,7 +2,7 @@ use strict;
 use warnings;
 package RDF::Lazy::Node;
 {
-  $RDF::Lazy::Node::VERSION = '0.071';
+  $RDF::Lazy::Node::VERSION = '0.08';
 }
 #ABSTRACT: A node in a lazy RDF graph
 
@@ -42,7 +42,7 @@ sub type {
     if ( @_ ) {
         my $types = $self->rels( $rdf_type ); # TODO use filter?
         foreach ( @_ ) {
-            my $type = $self->graph->uri( $_ );
+            my $type = $self->graph->uri( $_ ) or next;
             return 1 if (grep { $_->str eq $type->str } @$types);
         }
         return 0;
@@ -50,6 +50,8 @@ sub type {
         $self->rel( $rdf_type );
     }
 }
+
+*a = *type;
 
 sub types {
     my $self = shift;
@@ -106,7 +108,7 @@ RDF::Lazy::Node - A node in a lazy RDF graph
 
 =head1 VERSION
 
-version 0.071
+version 0.08
 
 =head1 DESCRIPTION
 
@@ -154,6 +156,10 @@ Returns the underlying graph L<RDF::Lazy> that the node belongs to.
 
 Returns some rdf:type of the node (if no types are provided) or checks
 whether this node is of any of the provided types.
+
+=head2 a ( [ @types ] )
+
+Shortcut for C<type>.
 
 =head2 is ( $check1 [, $check2 ... ] )
 
@@ -223,7 +229,7 @@ Jakob Voß <voss@gbv.de>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Jakob Voß.
+This software is copyright (c) 2013 by Jakob Voß.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

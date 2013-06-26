@@ -2,7 +2,7 @@
 use warnings;
 package RDF::Lazy::Resource;
 {
-  $RDF::Lazy::Resource::VERSION = '0.071';
+  $RDF::Lazy::Resource::VERSION = '0.08';
 }
 #ABSTRACT: URI reference node (aka resource) in a RDF::Lazy graph
 
@@ -59,7 +59,7 @@ RDF::Lazy::Resource - URI reference node (aka resource) in a RDF::Lazy graph
 
 =head1 VERSION
 
-version 0.071
+version 0.08
 
 =head1 DESCRIPTION
 
@@ -91,7 +91,7 @@ Jakob Voß <voss@gbv.de>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Jakob Voß.
+This software is copyright (c) 2013 by Jakob Voß.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
