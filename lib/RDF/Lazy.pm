@@ -2,7 +2,7 @@
 use warnings;
 package RDF::Lazy;
 {
-  $RDF::Lazy::VERSION = '0.08';
+  $RDF::Lazy::VERSION = '0.081';
 }
 #ABSTRACT: Lazy typing access to RDF data
 
@@ -445,7 +445,7 @@ RDF::Lazy - Lazy typing access to RDF data
 
 =head1 VERSION
 
-version 0.08
+version 0.081
 
 =head1 SYNOPSIS
 

@@ -17,7 +17,6 @@ t/30_methods.t
 t/40_chains.t
 t/author-critic.t
 t/caching.t
-t/example.ttl
 t/release-eol.t
 t/release-no-tabs.t
 t/release-pod-syntax.t

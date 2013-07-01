@@ -2,7 +2,7 @@ use strict;
 use warnings;
 package RDF::Lazy::Node;
 {
-  $RDF::Lazy::Node::VERSION = '0.08';
+  $RDF::Lazy::Node::VERSION = '0.081';
 }
 #ABSTRACT: A node in a lazy RDF graph
 
@@ -108,7 +108,7 @@ RDF::Lazy::Node - A node in a lazy RDF graph
 
 =head1 VERSION
 
-version 0.08
+version 0.081
 
 =head1 DESCRIPTION
 
